@@ -3,6 +3,7 @@
 	import { countDaysBetweenDates, formatNames } from '$lib/helper';
 	import AuthorShareChart from './AuthorShareChart.svelte';
 	import DayLineChart from './DayLineChart.svelte';
+	import EmojiCloudChart from './EmojiCloudChart.svelte';
 	import WordCloudChart from './WordCloudChart.svelte';
 	import WordPodium from './WordPodium.svelte';
 
@@ -42,6 +43,9 @@
 
 	<div class="lg:col-span-2">
 		<WordCloudChart {chat} />
+	</div>
+	<div class="lg:col-span-2">
+		<EmojiCloudChart {chat} />
 	</div>
 </section>
 <hr class="bg-[#128c7e] border-0 my-8 h-0.5" />
