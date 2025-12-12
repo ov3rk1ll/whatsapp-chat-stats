@@ -3,6 +3,7 @@
 	import { countDaysBetweenDates, formatNames } from '$lib/helper';
 	import AuthorShareChart from './AuthorShareChart.svelte';
 	import DayLineChart from './DayLineChart.svelte';
+	import WordCloudChart from './WordCloudChart.svelte';
 	import WordPodium from './WordPodium.svelte';
 
 	const { chat }: { chat: Chat } = $props();
@@ -38,6 +39,10 @@
 	<p class="text-2xl font-thin mx-auto text-center">Time of Day</p>
 	<p class="text-2xl font-thin mx-auto text-center">Month</p>
 	<p class="text-2xl font-thin mx-auto text-center">Weekday</p>
+
+	<div class="col-span-2">
+		<WordCloudChart {chat} />
+	</div>
 </section>
 <hr class="bg-[#128c7e] border-0 my-8 h-0.5" />
 <section class="divide-[#128c7e] divide-y-2 grid grid-cols-1 gap-4">

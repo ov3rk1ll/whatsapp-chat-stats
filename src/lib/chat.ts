@@ -11,7 +11,7 @@ export interface WordCount {
 
 export class Chat {
     private static emojiRegex = emojiRegex();
-    private static STOP_WORDS = [...stopwords_de, ...stopwords, '(Datei', 'angehängt)', 'is', 'eh', 'ned', 'ok', 'ma', 'net'];
+    private static STOP_WORDS = [...stopwords_de, ...stopwords, '(Datei', 'angehängt)', 'is', 'eh', 'ned', 'ok', 'ma', 'net', '<medien', 'ausgeschlossen>'];
 
     private messages: Message[] = [];
     private authors: string[] = [];
@@ -124,27 +124,25 @@ export class Chat {
         return this.authorMessagesCache[author];
     }
 
-    public getWordCount(author: string): WordCount[] {
+    public getWordCount(author: string, minOccurrence: number = 0): WordCount[] {
         if (!this.wordCount[author]) {
             return [];
         }
 
         return Object.entries(this.wordCount[author])
-            .map(([w, c]) => {
-                return { word: w, count: c };
-            })
-            .sort((a, b) => b.count - a.count);;
+            .map(([w, c]) => ({ word: w, count: c }))
+            .filter(w => w.count > minOccurrence)
+            .sort((a, b) => b.count - a.count);
     }
 
-    public getEmojiCount(author: string): WordCount[] {
+    public getEmojiCount(author: string, minOccurrence: number = 0): WordCount[] {
         if (!this.emojiCount[author]) {
             return [];
         }
 
         return Object.entries(this.emojiCount[author])
-            .map(([w, c]) => {
-                return { word: w, count: c };
-            })
+            .map(([w, c]) => ({ word: w, count: c }))
+            .filter(w => w.count > minOccurrence)
             .sort((a, b) => b.count - a.count);;
     }
 
