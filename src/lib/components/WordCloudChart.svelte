@@ -5,7 +5,10 @@
 
 	const { chat }: { chat: Chat } = $props();
 
+	let container: HTMLElement;
 	let canvas: HTMLCanvasElement;
+
+	const colorOptions = ['#f02222', '#ff5967', '#ff8ba7', '#ffbce1'];
 
 	function scaleNumbers(numbers: number[], lowerLimit: number, upperLimit: number) {
 		if (!numbers || numbers.length === 0) {
@@ -48,6 +51,9 @@
 	onMount(async () => {
 		const WordCloud = (await import('wordcloud')).default;
 
+		canvas.width = container.getBoundingClientRect().width;
+		canvas.height = (canvas.width / 16) * 10;
+
 		const words = chat.getWordCount('all', 75);
 		const scaledValue = scaleNumbers(
 			words.map((x) => x.count),
@@ -56,7 +62,6 @@
 		);
 
 		const list = words.map((w, i) => [w.word, scaledValue[i]] as ListEntry);
-		console.log({ list });
 		WordCloud(canvas, {
 			list: list,
 			shape: function (theta: number) {
@@ -101,18 +106,27 @@
 
 				return leng[((theta / (2 * Math.PI)) * leng.length) | 0] / max;
 			},
-			backgroundColor: '#ffe0e0',
-			shrinkToFit: false,
+			backgroundColor: '#ffffff',
+			shrinkToFit: true,
 			drawOutOfBound: false,
 			rotateRatio: 0.5,
 			rotationSteps: 2,
 			minSize: 10,
 			gridSize: 2,
-			color: '#f02222'
+			color: function (
+				word: string,
+				weight: string | number,
+				fontSize: number,
+				distance: number,
+				theta: number
+			) {
+				console.log(distance);
+				return colorOptions[distance % colorOptions.length];
+			}
 		});
 	});
 </script>
 
-<div class="">
+<div class="max-w-full" bind:this={container}>
 	<canvas bind:this={canvas} width="1170" height="760"></canvas>
 </div>

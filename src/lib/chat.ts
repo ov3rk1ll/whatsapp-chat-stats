@@ -11,7 +11,10 @@ export interface WordCount {
 
 export class Chat {
     private static emojiRegex = emojiRegex();
-    private static STOP_WORDS = [...stopwords_de, ...stopwords, '(Datei', 'angehängt)', 'is', 'eh', 'ned', 'ok', 'ma', 'net', '<medien', 'ausgeschlossen>'];
+    private static STOP_WORDS = [...stopwords_de, ...stopwords, '(Datei', 'angehängt)',
+        'is', 'eh', 'ned', 'ok', 'ma', 'net', '<medien', 'ausgeschlossen>',
+        'hahaha', 'haha', 'hahahaha', 'gehts'
+    ];
 
     private messages: Message[] = [];
     private authors: string[] = [];
@@ -76,12 +79,12 @@ export class Chat {
             .replace(Chat.emojiRegex, '')
             .replace(/\r\n/g, " ")
             .replace(/\n/g, " ")
-            .replace(/[.!,-:?/]/g, '')
+            .replace(/[.!,-:?'/]/g, '')
             .split(" ")
             .map(w => w.trim().toLowerCase())
             .filter(w => w.length > 1);
         for (const w of words) {
-            if (w.length === 0 || w === '' || Chat.STOP_WORDS.includes(w) || Chat.STOP_WORDS.includes(w.toLowerCase())) {
+            if (w.length <= 3 || w === '' || Chat.STOP_WORDS.includes(w) || Chat.STOP_WORDS.includes(w.toLowerCase())) {
                 continue;
             }
 

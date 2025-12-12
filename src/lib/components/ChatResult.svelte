@@ -29,8 +29,8 @@
 		emojis
 	</p>
 </section>
-<section class="mt-8 grid grid-cols-2 gap-8">
-	<div class="col-span-2">
+<section class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
+	<div class="lg:col-span-2">
 		<DayLineChart data={chat.getLineGraphData()} />
 	</div>
 	<div>
@@ -40,7 +40,7 @@
 	<p class="text-2xl font-thin mx-auto text-center">Month</p>
 	<p class="text-2xl font-thin mx-auto text-center">Weekday</p>
 
-	<div class="col-span-2">
+	<div class="lg:col-span-2">
 		<WordCloudChart {chat} />
 	</div>
 </section>

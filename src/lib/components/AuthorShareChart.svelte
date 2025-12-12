@@ -24,7 +24,6 @@
 	});
 
 	onMount(() => {
-		console.log(chartData);
 		new Chart(canvas, {
 			type: 'doughnut',
 			data: chartData,
