@@ -10,7 +10,11 @@
 {#if chat == undefined && loading == false}
 	<FileHandler
 		bind:loading
-		onload={(c) => (chat = c)}
+		onload={(c) => {
+			chat = c;
+			chat.authorNameMap['Katrin 🍓 Leitner'] = 'Katrin';
+			chat.authorNameMap['all'] = 'Together';
+		}}
 		onerror={(err) => {
 			alert(err);
 		}}

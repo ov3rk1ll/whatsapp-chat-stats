@@ -29,6 +29,8 @@ export class Chat {
 
     public longestMessage: Record<string, WordCount> = {};
 
+    public authorNameMap: Record<string, string> = {};
+
     public constructor(text: string | undefined = undefined) {
         if (text) {
             const startTime = performance.now();
@@ -84,7 +86,7 @@ export class Chat {
             .map(w => w.trim().toLowerCase())
             .filter(w => w.length > 1);
         for (const w of words) {
-            if (w.length <= 3 || w === '' || Chat.STOP_WORDS.includes(w) || Chat.STOP_WORDS.includes(w.toLowerCase())) {
+            if (w.length <= 0 || w === '' || Chat.STOP_WORDS.includes(w) || Chat.STOP_WORDS.includes(w.toLowerCase())) {
                 continue;
             }
 
@@ -179,6 +181,30 @@ export class Chat {
         });
 
         return daysDict;
+    }
+
+    public getHourlyData(author: string) {
+        const sections = new Array(24).fill(0);
+        this.getMessagesBy(author).map((message) => {
+            sections[message.date.getHours()] += 1;
+        });
+        return sections;
+    }
+
+    public getMonthlyData(author: string) {
+        const sections = new Array(12).fill(0);
+        this.getMessagesBy(author).map((message) => {
+            sections[message.date.getMonth()] += 1;
+        });
+        return sections;
+    }
+
+    public getWeekdayData(author: string) {
+        const sections = new Array(7).fill(0);
+        this.getMessagesBy(author).map((message) => {
+            sections[message.date.getDay()] += 1;
+        });
+        return sections;
     }
 
 }

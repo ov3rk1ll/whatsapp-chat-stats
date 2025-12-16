@@ -83,7 +83,6 @@
 				distance: number,
 				theta: number
 			) {
-				console.log(distance);
 				return colorOptions[distance % colorOptions.length];
 			}
 		});

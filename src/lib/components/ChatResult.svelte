@@ -2,17 +2,14 @@
 	import type { Chat } from '$lib/chat';
 	import { countDaysBetweenDates, formatNames } from '$lib/helper';
 	import AuthorShareChart from './AuthorShareChart.svelte';
+	import BarChart from './BarChart.svelte';
 	import DayLineChart from './DayLineChart.svelte';
 	import EmojiCloudChart from './EmojiCloudChart.svelte';
+	import RadarChart from './RadarChart.svelte';
 	import WordCloudChart from './WordCloudChart.svelte';
 	import WordPodium from './WordPodium.svelte';
 
 	const { chat }: { chat: Chat } = $props();
-
-	const mappedAuthors: Record<string, string> = $state({
-		'Katrin 🍓 Leitner': 'Katrin',
-		all: 'Together'
-	});
 
 	const days = $derived(
 		countDaysBetweenDates(chat.getMessages().at(0)!.date, chat.getMessages().at(-1)!.date)
@@ -21,7 +18,7 @@
 
 <section>
 	<p class="text-3xl text-balance">
-		{formatNames(chat.getAuthors().map((x) => mappedAuthors[x] || x))} wrote {chat.getMessages()
+		{formatNames(chat.getAuthors().map((x) => chat.authorNameMap[x] || x))} wrote {chat.getMessages()
 			.length} messages between {chat.getMessages().at(0)?.date.toLocaleDateString()} and {chat
 			.getMessages()
 			.at(-1)
@@ -37,9 +34,9 @@
 	<div>
 		<AuthorShareChart {chat} />
 	</div>
-	<p class="text-2xl font-thin mx-auto text-center">Time of Day</p>
-	<p class="text-2xl font-thin mx-auto text-center">Month</p>
-	<p class="text-2xl font-thin mx-auto text-center">Weekday</p>
+	<div><BarChart {chat} dataGrouping="hourly" /></div>
+	<div><RadarChart {chat} dataGrouping="monthly" title="Messages per month" /></div>
+	<div><RadarChart {chat} dataGrouping="weekday" title="Messages per weekday" /></div>
 
 	<div class="lg:col-span-2">
 		<WordCloudChart {chat} />
@@ -53,7 +50,7 @@
 	{#each [...chat.getAuthors(), 'all'] as author}
 		<article class="border-2 border-gray-500">
 			<div class="flex flex-row items-baseline p-4 bg-gray-300">
-				<h2 class="text-5xl">{mappedAuthors[author] || author}</h2>
+				<h2 class="text-5xl">{chat.authorNameMap[author] || author}</h2>
 				<span class="text-2xl opacity-60">
 					&nbsp;sent {chat.getMessagesBy(author).length} messages</span
 				>

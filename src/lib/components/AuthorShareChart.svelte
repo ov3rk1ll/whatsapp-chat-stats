@@ -12,7 +12,7 @@
 	let canvas: HTMLCanvasElement;
 
 	const chartData = $derived({
-		labels: chat.getAuthors(),
+		labels: chat.getAuthors().map((a) => chat.authorNameMap[a] || a),
 		datasets: [
 			{
 				label: 'Messages per person',

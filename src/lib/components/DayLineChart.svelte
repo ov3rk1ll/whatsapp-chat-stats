@@ -7,7 +7,8 @@
 		PointElement,
 		LineElement,
 		TimeScale,
-		Tooltip
+		Tooltip,
+		Filler
 	} from 'chart.js';
 	import 'chartjs-adapter-moment';
 	import { onMount } from 'svelte';
@@ -21,7 +22,8 @@
 		PointElement,
 		LineElement,
 		TimeScale,
-		Tooltip
+		Tooltip,
+		Filler
 	);
 
 	let canvas: HTMLCanvasElement;
@@ -37,6 +39,7 @@
 				lineTension: 0,
 				pointRadius: 0,
 				pointHitRadius: 2,
+				fill: true,
 				backgroundColor: '#EF5350',
 				borderColor: '#B71C1C'
 			}
@@ -69,7 +72,9 @@
 						title: {
 							display: true,
 							text: 'Messages'
-						}
+						},
+						beginAtZero: true,
+						min: 0
 						/*scaleLabel: {
 							display: true,
 							labelString: 'Messages'
