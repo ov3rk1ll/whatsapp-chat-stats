@@ -1,10 +1,17 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import type { Chat } from '$lib/chat.svelte';
 	import type { ListEntry } from 'wordcloud';
 	import { scaleNumbers } from '$lib/utils/math';
 
-	const { chat, theme }: { chat: Chat; theme: string } = $props();
+	const { chat, theme, ignoredWords }: { chat: Chat; theme: string; ignoredWords: string } =
+		$props();
+
+	const ignoredWordArray = $derived(
+		ignoredWords
+			.split(',')
+			.map((x) => x.trim())
+			.filter((x) => !!x)
+	);
 
 	let container: HTMLElement;
 	let canvas: HTMLCanvasElement;
@@ -81,6 +88,7 @@
 
 	$effect(() => {
 		themeOptions;
+		ignoredWordArray;
 		render();
 	});
 
@@ -102,7 +110,8 @@
 		canvas.width = container.getBoundingClientRect().width;
 		canvas.height = (canvas.width / 16) * 10;
 
-		const words = getWordCountBucket();
+		const words = getWordCountBucket().filter((x) => !ignoredWordArray.includes(x.word));
+		console.log(words.map((x) => x.word).join('\n'));
 		const scaledValue = scaleNumbers(
 			words.map((x) => x.count),
 			1,
@@ -137,5 +146,5 @@
 </script>
 
 <div class="max-w-full" bind:this={container}>
-	<canvas bind:this={canvas} width="1170" height="760"></canvas>
+	<canvas bind:this={canvas} width="1170" height="760" onclick={render}></canvas>
 </div>

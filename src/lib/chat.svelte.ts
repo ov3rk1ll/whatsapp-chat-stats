@@ -14,7 +14,6 @@ export class Chat {
     private static emojiRegex = emojiRegex();
     private static STOP_WORDS = [...stopwords_de, ...stopwords, '(Datei', 'angehängt)',
         'is', 'eh', 'ned', 'ok', 'ma', 'net', '<medien', 'ausgeschlossen>',
-        'hahaha', 'haha', 'hahahaha', 'gehts'
     ];
 
     private messages: Message[] = [];
@@ -131,7 +130,6 @@ export class Chat {
     }
 
     public getWordCount(author: string, minOccurrence: number = 0): WordCount[] {
-        console.log('getWordCount', author, minOccurrence);
         if (!this.wordCount[author]) {
             return [];
         }

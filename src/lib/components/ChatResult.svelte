@@ -18,6 +18,8 @@
 	);
 
 	let wordCloudTheme = $state('random-square-white');
+	let ignoredWords = $state('');
+	let _ignoredWords = $state('');
 
 	function changeAuthor(k: string, v: string) {
 		chat.authorNameMap[k] = v;
@@ -70,12 +72,27 @@
 	<div><RadarChart {chat} dataGrouping="weekday" title="Messages per weekday" /></div>
 
 	<div class="lg:col-span-2 flex flex-col">
-		<WordCloudChart {chat} theme={wordCloudTheme} />
+		<WordCloudChart {chat} theme={wordCloudTheme} {ignoredWords} />
 		<select class="select" bind:value={wordCloudTheme}>
 			<option value="random-square-white">White</option>
 			<option value="random-square-black">Black</option>
 			<option value="love">Love</option>
 		</select>
+		<div class="relative inline-block">
+			<input
+				type="text"
+				bind:value={_ignoredWords}
+				class="block w-full px-1 py-3 border text-heading text-sm rounded-md shadow-xs"
+				required
+			/>
+			<button
+				type="button"
+				class="cursor-pointer absolute end-1.5 bottom-1.5 text-white bg-wa-1 hover:brightness-105 box-border border border-transparent focus:ring-4 shadow-xs font-medium leading-5 rounded-md text-xs px-3 py-1.5 focus:outline-none"
+				onclick={() => {
+					ignoredWords = _ignoredWords;
+				}}>Apply</button
+			>
+		</div>
 	</div>
 	<div class="lg:col-span-2">
 		<EmojiCloudChart {chat} />
