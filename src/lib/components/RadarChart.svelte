@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Chat } from '$lib/chat';
+	import type { Chat } from '$lib/chat.svelte';
 	import { chatColors, hexToRgbA } from '$lib/utils/colors';
 	import { Chart, Filler, RadarController, RadialLinearScale } from 'chart.js';
 	import 'chartjs-adapter-moment';
@@ -15,6 +15,7 @@
 	Chart.register(RadarController, RadialLinearScale, Filler);
 
 	let canvas: HTMLCanvasElement;
+	let chart: Chart | undefined = undefined;
 
 	const chartData = $derived({
 		labels: dataGrouping == 'monthly' ? moment.months() : moment.weekdays(),
@@ -29,8 +30,16 @@
 		})
 	});
 
+	$effect(() => {
+		chartData;
+		if (chart) {
+			chart.data = chartData;
+			chart.update();
+		}
+	});
+
 	onMount(() => {
-		new Chart(canvas, {
+		chart = new Chart(canvas, {
 			type: 'radar',
 			data: chartData,
 			options: {

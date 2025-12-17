@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Chat } from '$lib/chat';
+	import type { Chat } from '$lib/chat.svelte';
 	import { chatColors } from '$lib/utils/colors';
 	import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
 	import 'chartjs-adapter-moment';
@@ -10,6 +10,8 @@
 	Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
 	let canvas: HTMLCanvasElement;
+
+	let chart: Chart | undefined = undefined;
 
 	const chartData = $derived({
 		labels: chat.getAuthors().map((a) => chat.authorNameMap[a] || a),
@@ -23,8 +25,24 @@
 		]
 	});
 
+	$effect(() => {
+		chartData;
+		if (chart) {
+			chart.data = chartData;
+			chart.update();
+		}
+	});
+
+	/*$inspect(chartData).with((type, data) => {
+		if (type === 'update' && chart) {
+			console.log('update chart with', chartData);
+			chart.data = chartData;
+			chart.update();
+		}
+	});*/
+
 	onMount(() => {
-		new Chart(canvas, {
+		chart = new Chart(canvas, {
 			type: 'doughnut',
 			data: chartData,
 			options: {

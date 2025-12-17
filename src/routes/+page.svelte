@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Chat } from '$lib/chat';
+	import { Chat } from '$lib/chat.svelte';
 	import ChatResult from '$lib/components/ChatResult.svelte';
 	import FileHandler from '$lib/components/FileHandler.svelte';
 
@@ -8,11 +8,15 @@
 </script>
 
 {#if chat == undefined && loading == false}
+	<p class="my-2 text-center">
+		<span class="font-bold">All processing is done locally on your device!</span> No chat data is sent,
+		stored, or shared anywhere.
+	</p>
 	<FileHandler
 		bind:loading
 		onload={(c) => {
 			chat = c;
-			chat.authorNameMap['Katrin 🍓 Leitner'] = 'Katrin';
+			// chat.authorNameMap['Katrin 🍓 Leitner'] = 'Katrin';
 			chat.authorNameMap['all'] = 'Together';
 		}}
 		onerror={(err) => {
@@ -24,7 +28,7 @@
 {#if loading}
 	<div class="w-full">
 		<div class="h-2 w-full bg-[#ece5dd] overflow-hidden">
-			<div class="progress w-full h-full bg-[#128c7e] left-right"></div>
+			<div class="progress w-full h-full bg-wa-2 left-right"></div>
 		</div>
 	</div>
 {/if}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { WordCount } from '$lib/chat';
+	import type { WordCount } from '$lib/chat.svelte';
 
 	const { words, textClass = 'text-8xl sm:text-8xl' }: { words: WordCount[]; textClass?: string } =
 		$props();

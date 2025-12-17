@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import type { Chat } from '$lib/chat';
+	import type { Chat } from '$lib/chat.svelte';
 	import type { ListEntry } from 'wordcloud';
 	import { scaleNumbers } from '$lib/utils/math';
 

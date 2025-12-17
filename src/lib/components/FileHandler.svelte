@@ -1,7 +1,6 @@
 <script lang="ts">
 	import JSZip from 'jszip';
-	import { Chat } from '$lib/chat';
-	import type { ChangeEventHandler } from 'svelte/elements';
+	import { Chat } from '$lib/chat.svelte';
 
 	let {
 		loading = $bindable<boolean>(false),
@@ -9,8 +8,14 @@
 		onerror
 	}: { loading: boolean; onload: (chat: Chat) => void; onerror: (error: any) => void } = $props();
 
+	let dragging = $state<boolean>(false);
+
 	function handleFileInput(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
 		const files = (e.target as HTMLInputElement).files;
+		handleFiles(files ? Array.from(files as ArrayLike<File>) : null);
+	}
+
+	function handleFiles(files: File[] | null) {
 		if (files == null || files.length != 1) {
 			onerror('Only drop one file!');
 			return;
@@ -60,12 +65,33 @@
 		onload(new Chat(result as string));
 		loading = false;
 	}
+
+	function handleDrop(ev: DragEvent) {
+		ev.preventDefault();
+		dragging = false;
+		const files = [...(ev.dataTransfer?.items || [])]
+			.map((item) => item.getAsFile())
+			.filter((file) => !!file);
+		handleFiles(files);
+	}
 </script>
 
 <div class="flex items-center justify-center w-full">
 	<label
 		for="dropzone-file"
-		class="flex flex-col items-center justify-center w-full h-64 bg-neutral-secondary-medium border border-dashed border-default-strong rounded-base cursor-pointer hover:bg-neutral-tertiary-medium"
+		class=" flex flex-col items-center justify-center w-full h-64 bg-neutral-secondary-medium border border-dashed border-default-strong rounded-base cursor-pointer hover:bg-neutral-tertiary-medium"
+		class:bg-slate-300={dragging}
+		ondrop={handleDrop}
+		ondragenter={(e) => {
+			dragging = true;
+		}}
+		ondragleave={(e) => {
+			dragging = false;
+		}}
+		ondragover={(e) => {
+			e.preventDefault();
+			dragging = true;
+		}}
 	>
 		<div class="flex flex-col items-center justify-center text-body pt-5 pb-6">
 			<svg
@@ -87,7 +113,11 @@
 			<p class="mb-2 text-sm">
 				<span class="font-semibold">Click to select</span> or drag and drop
 			</p>
-			<p class="text-xs">WhatsApp Chat export TXT</p>
+			{#if dragging}
+				<p class="text-xs">Drop now</p>
+			{:else}
+				<p class="text-xs">WhatsApp Chat export TXT</p>
+			{/if}
 		</div>
 		<input id="dropzone-file" type="file" class="hidden" onchange={handleFileInput} />
 	</label>

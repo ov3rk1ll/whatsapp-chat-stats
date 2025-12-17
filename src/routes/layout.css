@@ -2,6 +2,34 @@
 
 @layer base {
 	body {
-		background-color: #075e54;
+		@apply bg-[#075e54];
+	}
+
+	.btn {
+		@apply inline-flex cursor-pointer flex-row items-center justify-center gap-2 rounded-md px-4 py-1 text-base whitespace-nowrap hover:bg-[#128c7e];
+	}
+}
+
+@layer utilities {
+	.bg-wa-1 {
+		@apply bg-[#075e54];
+	}
+
+	.text-wa-1 {
+		@apply text-[#075e54];
+	}
+	.divide-wa-1 {
+		@apply divide-[#075e54];
+	}
+
+	.bg-wa-2 {
+		@apply bg-[#128c7e];
+	}
+
+	.text-wa-2 {
+		@apply text-[#128c7e];
+	}
+	.divide-wa-2 {
+		@apply divide-[#128c7e];
 	}
 }

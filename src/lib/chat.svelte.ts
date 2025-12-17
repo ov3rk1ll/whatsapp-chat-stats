@@ -3,6 +3,7 @@ import stopwords_de from "stopwords-de";
 import stopwords from "stopwords-en";
 import emojiRegex from 'emoji-regex';
 import moment from 'moment';
+import { SvelteSet } from 'svelte/reactivity';
 
 export interface WordCount {
     word: string;
@@ -29,7 +30,7 @@ export class Chat {
 
     public longestMessage: Record<string, WordCount> = {};
 
-    public authorNameMap: Record<string, string> = {};
+    public authorNameMap = $state<Record<string, string>>({});
 
     public constructor(text: string | undefined = undefined) {
         if (text) {
@@ -39,7 +40,7 @@ export class Chat {
                 throw new Error("No messages in chat");
             }
 
-            const authors: Set<string> = new Set();
+            const authors: Set<string> = new SvelteSet();
             for (const m of messages) {
                 if (m.message.startsWith('\u200e')) {
                     continue;
@@ -130,6 +131,7 @@ export class Chat {
     }
 
     public getWordCount(author: string, minOccurrence: number = 0): WordCount[] {
+        console.log('getWordCount', author, minOccurrence);
         if (!this.wordCount[author]) {
             return [];
         }
@@ -156,7 +158,7 @@ export class Chat {
     }
 
     public getUniqueEmoji() {
-        const set = new Set();
+        const set = new SvelteSet();
         Object.entries(this.emojiCount['all']).forEach(([w]) => { set.add(w); });
         return Array.from(set);
     }

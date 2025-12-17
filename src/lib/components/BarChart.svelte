@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Chat } from '$lib/chat';
+	import type { Chat } from '$lib/chat.svelte';
 	import { chatColors } from '$lib/utils/colors';
 	import { Chart, BarController, BarElement } from 'chart.js';
 	import 'chartjs-adapter-moment';
@@ -10,6 +10,8 @@
 	Chart.register(BarController, BarElement);
 
 	let canvas: HTMLCanvasElement;
+
+	let chart: Chart | undefined = undefined;
 
 	const chartData = $derived({
 		labels: [
@@ -48,8 +50,16 @@
 		})
 	});
 
+	$effect(() => {
+		chartData;
+		if (chart) {
+			chart.data = chartData;
+			chart.update();
+		}
+	});
+
 	onMount(() => {
-		new Chart(canvas, {
+		chart = new Chart(canvas, {
 			type: 'bar',
 			data: chartData,
 			options: {
