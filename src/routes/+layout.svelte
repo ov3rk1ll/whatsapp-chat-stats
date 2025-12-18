@@ -17,12 +17,12 @@
 		<p class="text-3xl font-semibold">WhatsApp Chat Stats</p>
 		<nav class="flex gap-2">
 			<button
-				class="btn"
+				class="btn hover:preset-tonal"
 				onclick={() => {
 					window.location.href = page.url.toString();
 				}}>Start over</button
 			>
-			<a class="btn" href="#">About</a>
+			<a class="btn hover:preset-tonal" href="#">About</a>
 		</nav>
 	</header>
 	<main

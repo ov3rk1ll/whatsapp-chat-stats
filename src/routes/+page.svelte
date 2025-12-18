@@ -27,8 +27,8 @@
 
 {#if loading}
 	<div class="w-full">
-		<div class="h-2 w-full bg-[#ece5dd] overflow-hidden">
-			<div class="progress w-full h-full bg-wa-2 left-right"></div>
+		<div class="h-2 w-full bg-surface-100 overflow-hidden">
+			<div class="progress w-full h-full bg-secondary-500 left-right"></div>
 		</div>
 	</div>
 {/if}

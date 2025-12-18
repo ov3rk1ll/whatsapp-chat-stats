@@ -1,7 +1,12 @@
 <script lang="ts">
 	import type { Chat } from '$lib/chat.svelte';
-	import { countDaysBetweenDates, formatNames } from '$lib/helper';
-	import type { stringify } from 'querystring';
+	import { countDaysBetweenDates } from '$lib/helper';
+
+	import CheckIcon from 'lucide-svelte/icons/check';
+	import PlusIcon from 'lucide-svelte/icons/plus';
+	import MinusIcon from 'lucide-svelte/icons/minus';
+	import { Accordion } from '@skeletonlabs/skeleton-svelte';
+
 	import AuthorShareChart from './AuthorShareChart.svelte';
 	import BarChart from './BarChart.svelte';
 	import DayLineChart from './DayLineChart.svelte';
@@ -71,35 +76,52 @@
 	<div><RadarChart {chat} dataGrouping="monthly" title="Messages per month" /></div>
 	<div><RadarChart {chat} dataGrouping="weekday" title="Messages per weekday" /></div>
 
-	<div class="lg:col-span-2 flex flex-col">
+	<div class="lg:col-span-2">
 		<WordCloudChart {chat} theme={wordCloudTheme} {ignoredWords} />
-		<select class="select" bind:value={wordCloudTheme}>
-			<option value="random-square-white">White</option>
-			<option value="random-square-black">Black</option>
-			<option value="love">Love</option>
-		</select>
-		<div class="relative inline-block">
-			<input
-				type="text"
-				bind:value={_ignoredWords}
-				class="block w-full px-1 py-3 border text-heading text-sm rounded-md shadow-xs"
-				required
-			/>
-			<button
-				type="button"
-				class="cursor-pointer absolute end-1.5 bottom-1.5 text-white bg-wa-1 hover:brightness-105 box-border border border-transparent focus:ring-4 shadow-xs font-medium leading-5 rounded-md text-xs px-3 py-1.5 focus:outline-none"
-				onclick={() => {
-					ignoredWords = _ignoredWords;
-				}}>Apply</button
-			>
-		</div>
+
+		<Accordion collapsible>
+			<Accordion.Item value="1">
+				<h3>
+					<Accordion.ItemTrigger class="flex justify-between items-center">
+						Wordcloud settings
+						<Accordion.ItemIndicator class="group">
+							<MinusIcon class="size-4 group-data-[state=open]:block hidden" />
+							<PlusIcon class="size-4 group-data-[state=open]:hidden block" />
+						</Accordion.ItemIndicator>
+					</Accordion.ItemTrigger>
+				</h3>
+				<Accordion.ItemContent class="space-y-4 border-[1px] border-surface-200-800 rounded-base">
+					<div class="input-group grid-cols-[auto_1fr]">
+						<div class="ig-cell preset-tonal">Theme</div>
+						<select class="ig-select" bind:value={wordCloudTheme}>
+							<option value="random-square-white">White</option>
+							<option value="random-square-black">Black</option>
+							<option value="love">Love</option>
+						</select>
+					</div>
+
+					<div class="input-group grid-cols-[auto_1fr_auto]">
+						<div class="ig-cell preset-tonal">Blocked words</div>
+						<input class="ig-input" type="text" bind:value={_ignoredWords} />
+						<button
+							class="ig-btn preset-filled-primary-500"
+							onclick={() => {
+								ignoredWords = _ignoredWords;
+							}}
+						>
+							<CheckIcon size={16} />
+						</button>
+					</div>
+				</Accordion.ItemContent>
+			</Accordion.Item>
+		</Accordion>
 	</div>
 	<div class="lg:col-span-2">
 		<EmojiCloudChart {chat} />
 	</div>
 </section>
-<hr class="bg-wa-2 border-0 my-8 h-0.5" />
-<section class="divide-wa-2 divide-y-2 grid grid-cols-1 gap-4">
+<hr class="bg-secondary-500 border-0 my-8 h-0.5" />
+<section class="grid grid-cols-1 gap-4">
 	{#each [...chat.getAuthors(), 'all'] as author}
 		<article class="border-2 border-gray-500">
 			<div class="flex flex-row items-baseline p-4 bg-gray-300">
@@ -133,12 +155,5 @@
 
 <style lang="postcss">
 	@reference "tailwindcss";
-	.select {
-		@apply appearance-none bg-slate-100 py-2 pr-10 pl-2 text-slate-950;
-		print-color-adjust: exact;
-		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='oklch(55.1%25 0.027 264.364)' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-		background-position: right 0.5rem center;
-		background-repeat: no-repeat;
-		background-size: 1.5em 1.5em;
-	}
+	@reference "@skeletonlabs/skeleton";
 </style>

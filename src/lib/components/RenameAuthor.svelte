@@ -1,4 +1,6 @@
 <script lang="ts">
+	import CheckIcon from 'lucide-svelte/icons/check';
+
 	const {
 		key,
 		map = $bindable(),
@@ -14,21 +16,17 @@
 </script>
 
 {#if edit}
-	<div class="relative inline-block">
-		<input
-			type="text"
-			bind:value
-			class="block w-full px-1 py-3 border text-heading text-sm rounded-md shadow-xs"
-			required
-		/>
+	<div class="input-group grid-cols-[1fr_auto] inline-grid">
+		<input class="ig-input" type="text" bind:value />
 		<button
-			type="button"
-			class="cursor-pointer absolute end-1.5 bottom-1.5 text-white bg-wa-1 hover:brightness-105 box-border border border-transparent focus:ring-4 shadow-xs font-medium leading-5 rounded-md text-xs px-3 py-1.5 focus:outline-none"
+			class="ig-btn preset-filled-primary-500"
 			onclick={() => {
 				onchange(key, value);
 				edit = false;
-			}}>Done</button
+			}}
 		>
+			<CheckIcon size={16} />
+		</button>
 	</div>
 {:else}
 	<button
